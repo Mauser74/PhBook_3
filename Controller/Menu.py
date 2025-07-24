@@ -175,7 +175,7 @@ class Menu:
 
         phone = input(f'{text.enter_phone}')
         address = input(f'{text.enter_address}')
-        self.__ph_book.add(Contact(new_name, phone, address))
+        self.__ph_book.add_contact(Contact(new_name, phone, address))
 
 
     def __search_contact(self) -> None:

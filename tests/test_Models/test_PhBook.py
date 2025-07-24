@@ -79,10 +79,14 @@ class PhoneBookTestCase(TestCase):
         :return: None
         """
         self.book = PhoneBook()
-        self.book.add(Contact('Иванов Иван Иванович', 'г. Иваново, ул. Ивановская, д. 1, кв. 11', '+7(111)-111-11-11'))
-        self.book.add(Contact('Петров Пётр Петрович', 'г. Санкт-Петербург, ул. Петроградская, д. 2, кв. 22', '+7(222)-222-22-22'))
-        self.book.add(Contact('Сидоров Сидор Сидорович', 'Московская область, деревня Сидорово, . дом 33', '+7(333)-333-33-33'))
-        self.book.add(Contact('Семёнов Семён Семёнович', 'г. Семёнов, ул. Большая Семёновская, д. 4, кв. 44', '+7(444)-444-44-44'))
+        self.book.add_contact(
+            Contact('Иванов Иван Иванович', 'г. Иваново, ул. Ивановская, д. 1, кв. 11', '+7(111)-111-11-11'))
+        self.book.add_contact(
+            Contact('Петров Пётр Петрович', 'г. Санкт-Петербург, ул. Петроградская, д. 2, кв. 22', '+7(222)-222-22-22'))
+        self.book.add_contact(
+            Contact('Сидоров Сидор Сидорович', 'Московская область, деревня Сидорово, . дом 33', '+7(333)-333-33-33'))
+        self.book.add_contact(Contact('Семёнов Семён Семёнович', 'г. Семёнов, ул. Большая Семёновская, д. 4, кв. 44',
+                                      '+7(444)-444-44-44'))
 
 
     def tearDown(self):
@@ -103,81 +107,60 @@ class PhoneBookTestCase(TestCase):
         """
         Проверка установки имени файла телефонной книги
         """
-        with self.subTest(msg = f'Проверка инициализации имени файла', _filename = self.book._filename, expected = ""):
-            self.assertEqual(self.book._filename, "")
+        self.assertEqual(self.book._filename, "",
+                         f'Проверка инициализации имени файла. Имя файла: "{self.book._filename}", ожидалось ""')
 
         self.book.set_filename('test.json')
-        with self.subTest(msg = f'Проверка установки имени файла', _filename = self.book._filename, expected = "test.json"):
-            self.assertEqual(self.book._filename, 'test.json')
+        self.assertEqual(self.book.get_filename(), 'test.json',
+                         f'Проверка установки имени файла. Имя файла: "{self.book._filename}", ожидалось "test.json"')
 
 
-    # def set_filename(self, filename: str) -> None:
-    #     """Сеттер имени файла телефонной книги
-    #
-    #     :param filename: Имя файла телефонной книги
-    #     :type filename: str
-    #     :return: -> None
-    #     """
-    #     self._filename = filename
-    #
-    #
-    # def get_filename(self) -> str:
-    #     """Геттер имени файла телефонной книги с которой работаем
-    #
-    #     :return: имя файла телефонной книги с которой работаем
-    #     :rtype: str
-    #     """
-    #     return self._filename
-    #
-    #
-    # def get_size(self) -> int:
-    #     """Геттер числа контактов в телефонной книге
-    #
-    #     :return: число контактов в телефонной книге
-    #     :rtype: int
-    #     """
-    #     return len(self._ph_book)
-    #
-    #
-    # def get_contact(self, idx: int) -> (Contact, None):
-    #     """Геттер записи из телефонной книги
-    #
-    #     :param idx: индекс записи в телефонной книге
-    #     :type idx: int
-    #
-    #     :return: словарь с записью
-    #     :rtype: (Contact, None)
-    #     """
-    #     if 0 <= idx <= len(self._ph_book):
-    #         return self._ph_book[idx]
-    #     else:
-    #         return None
-    #
-    #
-    # def del_contact(self, idx: int) -> None:
-    #     """Удаляет запись из телефонной книги
-    #
-    #     :param idx: индекс удаляемой записи в телефонной книге
-    #     :type idx: int
-    #     :return: -> None
-    #     """
-    #     if 0 <= idx <= len(self._ph_book):
-    #         del self._ph_book[idx]
-    #
-    #
-    # def set_contact(self, idx: int, contact: Contact) -> None:
-    #     """Записывает по существующему ID данные контакта
-    #
-    #     :param idx:
-    #     :type idx: int
-    #     :param contact:
-    #     :type contact: {}
-    #     :return: -> None
-    #     """
-    #     if idx < self.get_size():
-    #         self._ph_book[idx] = contact
-    #
-    #
+    def test_get_size(self):
+        """
+        Тест геттера числа контактов, записи в книгу, удаление из книги и очистки в телефонной книги.
+        """
+        self.assertEqual(self.book.get_size(), 4,
+                         f'Проверка количества записей в телефонной книге. Число записей: {self.book.get_size()}, ожидалось: 4')
+        self.book.add_contact(Contact("Урицкий Моисей Соломонович", "г. Ветлуга, ул. Урицкого, дом 31", ""))
+        self.assertEqual(self.book.get_size(), 5,
+                         f'Проверка количества записей в телефонной книге после добавления. Число записей: {self.book.get_size()}, ожидалось: 5')
+        self.book.del_contact(4)
+        self.assertEqual(self.book.get_size(), 4,
+                         f'Проверка количества записей в телефонной книге после удаления. Число записей: {self.book.get_size()}, ожидалось: 4')
+        self.book.clear_all()
+        self.assertEqual(self.book.get_size(), 0,
+                         f'Проверка количества записей в телефонной книге после очистки. Число записей: {self.book.get_size()}, ожидалось: 0')
+
+
+    def test_get_contact(self):
+        """
+        Тест геттера записи из телефонной книги
+        """
+        self.assertEqual(self.book.get_contact(0),
+                         Contact('Иванов Иван Иванович', 'г. Иваново, ул. Ивановская, д. 1, кв. 11',
+                                 '+7(111)-111-11-11'),f'Ошибка получения контакта из телефонной книги.')
+        self.assertEqual(self.book.get_contact(3),
+                         Contact('Семёнов Семён Семёнович', 'г. Семёнов, ул. Большая Семёновская, д. 4, кв. 44',
+                                  '+7(444)-444-44-44'),f'Ошибка получения контакта из телефонной книги.')
+        self.assertEqual(self.book.get_contact(4),None,
+                         f'Ошибка получения несуществующего контакта из телефонной книги.')
+        self.book.clear_all()
+        self.assertEqual(self.book.get_contact(0), None,
+                         f'Ошибка получения контакта из пустой телефонной книги.')
+
+
+    def test_set_contact(self):
+        """
+        Проверка записи по существующему ID данных контакта
+        """
+        self.book.set_contact(2, Contact("Жданов Андрей Александрович", "Московская область, деревня Ждановское, дом 81"))
+        self.assertEqual(self.book.get_contact(2),
+                         Contact("Жданов Андрей Александрович", "Московская область, деревня Ждановское, дом 81"),
+                         f'Ошибка замены контакта в телефонной книге.')
+        self.book.set_contact(4, Contact("Жданов Андрей Александрович", "Московская область, деревня Ждановское, дом 81"))
+        self.assertEqual(self.book.get_contact(4),None,f'Ошибка замены контакта в телефонной книге.')
+
+
     # def open(self) -> None:
     #     """Открываем файл телефонной книги и читаем его
     #

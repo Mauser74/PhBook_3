@@ -123,7 +123,7 @@ class PhoneBook:
         :return: словарь с записью
         :rtype: (Contact, None)
         """
-        if 0 <= idx <= len(self._ph_book):
+        if 0 <= idx < len(self._ph_book):
             return self._ph_book[idx]
         else:
             return None
@@ -136,7 +136,7 @@ class PhoneBook:
         :type idx: int
         :return: -> None
         """
-        if 0 <= idx <= len(self._ph_book):
+        if 0 <= idx < len(self._ph_book):
             del self._ph_book[idx]
 
 
@@ -149,7 +149,7 @@ class PhoneBook:
         :type contact: {}
         :return: -> None
         """
-        if idx < self.get_size():
+        if 0 <= idx < self.get_size():
             self._ph_book[idx] = contact
 
 
@@ -187,7 +187,7 @@ class PhoneBook:
             press_enter()
 
 
-    def add(self, contact: Contact) -> None:
+    def add_contact(self, contact: Contact) -> None:
         """Добавление нового контакта в телефонную книгу
 
         :param contact: словарь с новым контактом
