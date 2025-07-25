@@ -120,7 +120,7 @@ class PhoneBook:
         :param idx: индекс записи в телефонной книге
         :type idx: int
 
-        :return: словарь с записью
+        :return: экземпляр класса Contact, или None, если записи с таким индексом не существует
         :rtype: (Contact, None)
         """
         if 0 <= idx < len(self._ph_book):
@@ -153,7 +153,7 @@ class PhoneBook:
             self._ph_book[idx] = contact
 
 
-    def open(self) -> None:
+    def load(self) -> None:
         """Открываем файл телефонной книги и читаем его
 
         :return: -> None

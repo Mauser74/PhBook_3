@@ -94,7 +94,7 @@ class Menu:
                     # Имя файла открываемой телефонной книги
                     self.__ph_book.set_filename(files_list[file_num])
                     # Открываем файл
-                    self.__ph_book.open()
+                    self.__ph_book.load()
             return
 
 
